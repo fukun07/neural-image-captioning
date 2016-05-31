@@ -7,7 +7,7 @@ We provide detailed steps to reproduce the results reported in our paper. The tw
 
 - region-based attention: we build our attention item-set using flexible visual regions proposed by Selective Search. The model can thus focus on more conceptually meaningful region of an image.
 
-If you find our code method useful in your research, please consider citing:
+If you find our code or model useful in your research, please consider citing:
 
 	@article{jin2015aligning,
   		title={Aligning where to see and what to tell: image caption with region-based attention and scene factorization},
@@ -31,15 +31,15 @@ The data and trained models are stored in hdf5 format. So you also need to insta
 The MSCOCO API is used in our code. Instead of creating a submodule, we directly place the related codes under codes/pycoco/ with some revision. We thank the MSCOCO team for their data and code. You can visit their [repository](https://github.com/tylin/coco-caption) for original code.
 
 #### 2. hardware
-Though you can run the code in CPU, we still highly recommend you to equip a GPU card. A typical training process on MSCOCO takes 10h in a Nvidia K10 GPU, while it may take weeks in CPU.
+Though you can run the code in CPU, we highly recommend you to equip a GPU card. A typical training process on MSCOCO takes 10h in a Nvidia K10 GPU, while it may take weeks in CPU.
 
 
 ### Run the code
 #### 1. clone the repository
-	git clone xxx
+	git clone https://github.com/fukun07/neural-image-captioning.git
 
 #### 2. download the data
-We provide the processed data of Flickr8K, Flickr30K and MSCOCO. There are totally 4 files:
+We provide the processed data of Flickr8K, Flickr30K and MSCOCO. There are totally 4 files. You may need to wait a moment when MEGA cloud loading.
 
 -  [data.zip](https://mega.nz/#!N4IEBQJC!MEmjk9QwdnjcgGgnyAd3dlJ3znkhDoPWYuXOPuGtZoQ) includes bounding boxes, captions, scene topics and ResNet feature for the whole image.
 

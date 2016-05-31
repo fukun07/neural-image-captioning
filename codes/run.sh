@@ -1,0 +1,1 @@
+THEANO_FLAGS=device=$2,floatX=float32 python $1

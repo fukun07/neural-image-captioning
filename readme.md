@@ -41,9 +41,9 @@ Though you can run the code in CPU, we highly recommend you to equip a GPU card.
 #### 2. download the data
 We provide the processed data of Flickr8K, Flickr30K and MSCOCO. There are totally 4 files. You may need to wait a moment when MEGA cloud loading.
 
--  [data.zip](https://mega.nz/#!N4IEBQJC!MEmjk9QwdnjcgGgnyAd3dlJ3znkhDoPWYuXOPuGtZoQ) includes bounding boxes, captions, scene topics and ResNet feature for the whole image.
+-  [data.zip 0.98G](https://mega.nz/#!N4IEBQJC!MEmjk9QwdnjcgGgnyAd3dlJ3znkhDoPWYuXOPuGtZoQ) includes bounding boxes, captions, scene topics and ResNet feature for the whole image.
 
-- [flickr8k-30res.zip](https://mega.nz/#!dxhgSIyR!DDGmRr-KJguHzqCg15uhAMcBLB_cVNiZXcf2WWF9btE) includes the 30-region ResNet features for Flickr8K.
+- [flickr8k-30res.zip 1.47G](https://mega.nz/#!dxhgSIyR!DDGmRr-KJguHzqCg15uhAMcBLB_cVNiZXcf2WWF9btE) includes the 30-region ResNet features for Flickr8K.
 
 - [flickr30k-30res.zip]() includes the 30-region ResNet features for Flickr30K.
 

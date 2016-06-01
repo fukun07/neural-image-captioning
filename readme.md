@@ -24,16 +24,16 @@ This code is released under the MIT License (refer to the LICENSE file for detai
 
 ### Requirements
 #### 1. software
-The model is trained using Theano, a popular  Theano: A Python framework for fast computation of mathematical expression. To install Theano, please refer to  [Installing Theano](http://deeplearning.net/software/theano/install.html#install).
+The model is trained using Theano, a popular Python framework for fast computation of mathematical expression. To install Theano, please refer to  [Installing Theano](http://deeplearning.net/software/theano/install.html#install).
 
 The data and trained models are stored in hdf5 format. So you also need to install [h5py](http://docs.h5py.org/en/latest/build.html) package.
 
 The MSCOCO API is used in our code. Instead of creating a submodule, we directly place the related codes under codes/pycoco/ with some revision. We thank the MSCOCO team for their data and code. You can visit their [repository](https://github.com/tylin/coco-caption) for original code.
 
 #### 2. hardware
-Though you can run the code in CPU, we highly recommend you to equip a GPU card. A typical training process on MSCOCO takes 10h in a Nvidia K10 GPU, while it may take weeks in CPU.
+Though you can run the code on CPU, we highly recommend you to equip a GPU card. A typical training process on MSCOCO takes 10h on a Nvidia K10 GPU, while it may take weeks on CPU.
 
-The feature size for attention model is big so you will need a large memory when running attention model. For the largest dataset mscoco, at least 30G memory is required (note, not GPU memory). 
+The feature size for attention model is big so you need a large memory when running attention model. For the largest dataset mscoco, at least 30G memory is required (note, not GPU memory). 
 
 
 ### Quick start
@@ -67,7 +67,7 @@ Then it will start to train a model using scene-specific contexts (**ss** by def
 
 In SAVE_ROOT, now you can see a new directory named **mscoco-ss-nh512-nw512-mb64-V8843**. The model is trained on MSCOCO dataset with 512 LSTM hidden size, 512 word embedding size, 64 mini-batch size and 8843 vocalbulary size.
 
-The training will take hours to finish. If you cannot wait, you can skip to next step and use the pre-trained model provided by us. The model directory [mscoco-ss-nh512-nw512-mb64-V8843.zip](https://mega.nz/#!90wkSYwB!kIuWwplSD69vGzGDKKXiLIfhEQzrYwrqf7Kboh7X2kA) should be unzipped then placed under SAVE_ROOT.
+The training will take hours to finish. If you cannot wait, you can skip to next step and use the pre-trained model provided by us. The model directory [mscoco-ss-nh512-nw512-mb64-V8843.zip](https://mega.nz/#!90wkSYwB!kIuWwplSD69vGzGDKKXiLIfhEQzrYwrqf7Kboh7X2kA) should be unzipped and then placed under SAVE_ROOT.
 
 #### 5. generate caption
 To generate captions using the trained model, please run **infer.py** under codes/ :
@@ -84,11 +84,15 @@ Bleu1-4, METEOR, ROUGE-L, CIDEr-D scores will be shown after generation process.
 
 Attention model needs a larger feature set. For one image, ResNet is appplied to 30 regions to get a 30x2048 feature set (we call it **30res**). Since the feature files are large, we didn't include them in the **data.zip**. Instead we provide separate links to download them.
 
-- [flickr8k-30res.zip](https://mega.nz/#!dxhgSIyR!DDGmRr-KJguHzqCg15uhAMcBLB_cVNiZXcf2WWF9btE) (1.47G) includes the 30-region ResNet features for Flickr8K. Please unzip it and place it under DATA_ROOT/flickr8k/features/.
+- [flickr8k-30res.zip](https://mega.nz/#!dxhgSIyR!DDGmRr-KJguHzqCg15uhAMcBLB_cVNiZXcf2WWF9btE) (1.5G) includes the 30-region ResNet features for Flickr8K. Please unzip it and place it under DATA_ROOT/flickr8k/features/.
 
-- [flickr30k-30res.zip]() includes the 30-region ResNet features for Flickr30K. Please unzip it and place it under DATA_ROOT/flickr30k/features/.
+- [flickr30k-30res.zip](https://mega.nz/#!5o5CAJwS!edH97itEWU17XIeTTZqr2EIduhRZCIvTV6ZwQZ_r6Zw) (5.8G) includes the 30-region ResNet features for Flickr30K. Please unzip it and place it under DATA_ROOT/flickr30k/features/.
 
-- [mscoco-30res.zip]() includes the 30-region ResNet features for MSCOCO. Please unzip it and place it under DATA_ROOT/mscoco/features/.
+- [mscoco-30res.zip](https://mega.nz/#!twRBxSIY!FQAHVFoVPVdnS-3CkVL95e4zDEl8WCQPaoUV_aYfj2A) (16.4G) includes the 30-region ResNet features for MSCOCO. Please unzip it and place it under DATA_ROOT/mscoco/features/.
+
+
+We also provide an alternative source for downloading the data. Please refer to [Baidu Pan](http://pan.baidu.com/s/1c1Mtndm) in Chinese.
+
 
 #### 2. or extract features by yourself
 
@@ -109,7 +113,7 @@ Now you can train and test model **ra** (region-based attention) and **rass** (r
 
 
 ### Code structure
-In case you want to revise the code to run your own experiments, we describe the code desigh in the below.
+In case you want to revise the code to run your own experiments, we describe the code design in the below.
 
 #### 1. model/
 

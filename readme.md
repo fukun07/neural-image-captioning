@@ -48,14 +48,14 @@ We provide the processed data of Flickr8K, Flickr30K and MSCOCO. You may need to
 After downloading the **data.zip**, you are able to run model **baseline** and **ss** (scene-specific). 
 
 #### 3. configurate path
-Please open the **config.py** script and define the path you like:
+Please open the **config.py** script and define the path as you like:
 
-- **DATA_ROOT**: where the data are placed, default to be '../data'
+- DATA_ROOT: where the data are placed, default to be '../data'
 
-- **SAVE_ROOT**: where the trained models are saved, default to be '../saved'
+- SAVE_ROOT: where the trained models are saved, default to be '../saved'
 
 #### 4.train model
-Please run under codes/ using GPU:
+Please run **train.py** under codes/ using GPU:
 
 	THEANO_FLAGS=floatX=float32,device=gpu python train.py
 
@@ -63,16 +63,16 @@ or using CPU:
 
 	THEANO_FLAGS=floatX=float32,device=cpu python train.py
 
-Then it will start to train a model using scene-specific contexts (**ss**). The compilig time for the first running may be long, you can take a cup of coffer or do something else. (to me, about 15min)
+Then it will start to train a model using scene-specific contexts (**ss** by default). The first compilig time may be long, you can do something else. (to me, about 15min)
 
 In SAVE_ROOT, now you can see a new directory named **mscoco-ss-nh512-nw512-mb64-V8843**. The model is trained on MSCOCO dataset with 512 LSTM hidden size, 512 word embedding size, 64 mini-batch size and 8843 vocalbulary size.
 
 The training will take hours to finish. If you cannot wait, you can skip to next step and use the pre-trained model provided by us. The model directory [mscoco-ss-nh512-nw512-mb64-V8843.zip](https://mega.nz/#!90wkSYwB!kIuWwplSD69vGzGDKKXiLIfhEQzrYwrqf7Kboh7X2kA) should be unzipped then placed under SAVE_ROOT.
 
 #### 5. generate caption
-To generate captions using the trained model, please run under codes/ :
+To generate captions using the trained model, please run **infer.py** under codes/ :
 
-	THEANO_FLAGS=floatX=float32,device=gpu python train.py
+	THEANO_FLAGS=floatX=float32,device=gpu python infer.py
 
 Like the training, you can choose the device as GPU or CPU. The image id and generated caption will be printed in the screen. You can visit [MSCOCO](http://mscoco.org/explore/) to see the images by searching with image id.
 
@@ -82,7 +82,7 @@ Bleu1-4, METEOR, ROUGE-L, CIDEr-D scores will be shown after generation process.
 ### Run Attention model
 #### 1. download data
 
-Attention model needs a larger feature set. To our paper, ResNet is appplied to 30 regions to get a 30x2048 feature set (we call it **30res**). Since the feature files are large, we didn't include them in the **data.zip**. Instead we provide separate urls to download them.
+Attention model needs a larger feature set. For one image, ResNet is appplied to 30 regions to get a 30x2048 feature set (we call it **30res**). Since the feature files are large, we didn't include them in the **data.zip**. Instead we provide separate links to download them.
 
 - [flickr8k-30res.zip](https://mega.nz/#!dxhgSIyR!DDGmRr-KJguHzqCg15uhAMcBLB_cVNiZXcf2WWF9btE) (1.47G) includes the 30-region ResNet features for Flickr8K. Please unzip it and place it under DATA_ROOT/flickr8k/features/.
 
@@ -92,7 +92,7 @@ Attention model needs a larger feature set. To our paper, ResNet is appplied to 
 
 #### 2. or extract features by yourself
 
-You can also choose to extract the features using [Caffe](http://caffe.berkeleyvision.org/). We provide the original code that was used by us to extract 30res features. The general steps can be:
+You can also extract the features using [Caffe](http://caffe.berkeleyvision.org/). We provide the original code that was used by us to extract 30res features. The general steps can be:
 
 1. install Caffe and then set the CAFFE_ROOT in codes/config.py
 
@@ -105,7 +105,7 @@ You can also choose to extract the features using [Caffe](http://caffe.berkeleyv
 
 #### 3. run the model
 
-Now you can train and test model *ra* (region-based attention) and *rass* (region-based attention + scene-specific contexts).
+Now you can train and test model **ra** (region-based attention) and **rass** (region-based attention + scene-specific contexts).
 
 
 ### Code structure
@@ -113,19 +113,19 @@ In case you want to revise the code to run your own experiments, we describe the
 
 #### 1. model/
 
-We create a class for each of the models. Within the class, the Theano computation graph is defined and the parameters are initialized. Three attributes are necessary for a model class:
+We create a class for each of the models. Within the class, the Theano computation graph is defined and the parameters are initialized. Three members are necessary for a model class:
 
 - self.inputs: a list of Theano tensors containing all the needed inputs.
 
 - self.params: a list of parameters to be trained. Note that parameters not included in self.params will not be updated by optimizer.
 
-- self.costs: a list of loss, the 0-index loss will be used as objective function by optimizer.
+- self.costs: a list of loss, the 0-index loss will be used as the objective function by optimizer.
 
-These 3 attributes are important interfaces. All the model file are placed under codes/model/. Some common and basic layers such as mlp are defined in **layers.py**.
+These 3 members are important interfaces. All the model file are placed under codes/model/. Some common and basic layers such as mlp are defined in **layers.py**.
 
 #### 2. reader.py
 
-The reader is defined in **reader.py**. It reads all the needed data and manage the data feeding process. The users only need to call its method reader.iterate_batch() to get a new mini-batch of data. The reader uses multi-threading thus it can package next mini-batch when model is under training.
+The reader is defined in **reader.py**. It reads all the needed data and manage the data feeding process. Users only need to call its method reader.iterate_batch() to get a new mini-batch of data. The reader uses multi-threading thus it can package next mini-batch when model is under training.
 
 You can partially load a dataset by setting **head** and **tail**, the index range of images. This is very useful in debugging when you do not want the whole dataset be loaded.
 
@@ -149,7 +149,7 @@ Implement the beam search code. The word probability will be the ensemble reusul
 
 There are 4 choices for task: 
 
-1. 'gnic': stands for Google Nic, used as base-line
+1. 'gnic': stands for Google NIC, used as base-line
 2. 'ss': stands for scene-specific contexts
 3. 'ra': stands for region-based attention
 4. 'rass': stands for scene-specific contexts + region-based attention

@@ -33,23 +33,19 @@ The MSCOCO API is used in our code. Instead of creating a submodule, we directly
 #### 2. hardware
 Though you can run the code in CPU, we highly recommend you to equip a GPU card. A typical training process on MSCOCO takes 10h in a Nvidia K10 GPU, while it may take weeks in CPU.
 
+The feature size for attention model is big so you will need a large memory when running attention model. For the largest dataset mscoco, at least 30G memory is required (note, not GPU memory). 
 
-### Run the code
+
+### Quick start
 #### 1. clone the repository
 	git clone https://github.com/fukun07/neural-image-captioning.git
 
-#### 2. download the data
-We provide the processed data of Flickr8K, Flickr30K and MSCOCO. There are totally 4 files. You may need to wait a moment when MEGA cloud loading.
+#### 2. download data
+We provide the processed data of Flickr8K, Flickr30K and MSCOCO. You may need to wait a moment when the webpage is loading.
 
--  [data.zip 0.98G](https://mega.nz/#!N4IEBQJC!MEmjk9QwdnjcgGgnyAd3dlJ3znkhDoPWYuXOPuGtZoQ) includes bounding boxes, captions, scene topics and ResNet feature for the whole image.
+-  [data.zip](https://mega.nz/#!N4IEBQJC!MEmjk9QwdnjcgGgnyAd3dlJ3znkhDoPWYuXOPuGtZoQ) (0.98G) includes bounding boxes, captions, scene topics and the whole image CNN features extracted by ResNet.
 
-- [flickr8k-30res.zip 1.47G](https://mega.nz/#!dxhgSIyR!DDGmRr-KJguHzqCg15uhAMcBLB_cVNiZXcf2WWF9btE) includes the 30-region ResNet features for Flickr8K.
-
-- [flickr30k-30res.zip]() includes the 30-region ResNet features for Flickr30K.
-
-- [mscoco-30res.zip]() includes the 30-region ResNet features for MSCOCO.
-
-After downloading the **data.zip**, you are able to run model **baseline** and **ss**. So you can move on to try the code when waiting for the downloading of 30res features. (30res features are for the region-based attention models **ra** and **rass**.)
+After downloading the **data.zip**, you are able to run model **baseline** and **ss** (scene-specific). 
 
 #### 3. configurate path
 Please open the **config.py** script and define the path you like:
@@ -71,7 +67,7 @@ Then it will start to train a model using scene-specific contexts (**ss**). The 
 
 In SAVE_ROOT, now you can see a new directory named **mscoco-ss-nh512-nw512-mb64-V8843**. The model is trained on MSCOCO dataset with 512 LSTM hidden size, 512 word embedding size, 64 mini-batch size and 8843 vocalbulary size.
 
-The training will take hours to finish. If you cannot wait, you can skip to next step and use the pre-trained model provided by us. The model file [mscoco-ss-nh512-nw512-mb64-V8843.zip](https://mega.nz/#!90wkSYwB!kIuWwplSD69vGzGDKKXiLIfhEQzrYwrqf7Kboh7X2kA) should be unzipped then placed under SAVE_ROOT.
+The training will take hours to finish. If you cannot wait, you can skip to next step and use the pre-trained model provided by us. The model directory [mscoco-ss-nh512-nw512-mb64-V8843.zip](https://mega.nz/#!90wkSYwB!kIuWwplSD69vGzGDKKXiLIfhEQzrYwrqf7Kboh7X2kA) should be unzipped then placed under SAVE_ROOT.
 
 #### 5. generate caption
 To generate captions using the trained model, please run under codes/ :
@@ -83,8 +79,107 @@ Like the training, you can choose the device as GPU or CPU. The image id and gen
 Bleu1-4, METEOR, ROUGE-L, CIDEr-D scores will be shown after generation process.
 
 
-### Revise our code
-We will add description for our code design soon.
+### Run Attention model
+#### 1. download data
+
+Attention model needs a larger feature set. To our paper, ResNet is appplied to 30 regions to get a 30x2048 feature set (we call it **30res**). Since the feature files are large, we didn't include them in the **data.zip**. Instead we provide separate urls to download them.
+
+- [flickr8k-30res.zip](https://mega.nz/#!dxhgSIyR!DDGmRr-KJguHzqCg15uhAMcBLB_cVNiZXcf2WWF9btE) (1.47G) includes the 30-region ResNet features for Flickr8K. Please unzip it and place it under DATA_ROOT/flickr8k/features/.
+
+- [flickr30k-30res.zip]() includes the 30-region ResNet features for Flickr30K. Please unzip it and place it under DATA_ROOT/flickr30k/features/.
+
+- [mscoco-30res.zip]() includes the 30-region ResNet features for MSCOCO. Please unzip it and place it under DATA_ROOT/mscoco/features/.
+
+#### 2. or extract features by yourself
+
+You can also choose to extract the features using [Caffe](http://caffe.berkeleyvision.org/). We provide the original code that was used by us to extract 30res features. The general steps can be:
+
+1. install Caffe and then set the CAFFE_ROOT in codes/config.py
+
+2. download ResNet files from Caffe [model-zoo](https://github.com/BVLC/caffe/wiki/Model-Zoo) and place the files under CAFFE_ROOT/models/ResNet/.
+
+3. edit **cnn_feature.py** to your settings and run the code
+
+
+
+
+#### 3. run the model
+
+Now you can train and test model *ra* (region-based attention) and *rass* (region-based attention + scene-specific contexts).
+
+
+### Code structure
+In case you want to revise the code to run your own experiments, we describe the code desigh in the below.
+
+#### 1. model/
+
+We create a class for each of the models. Within the class, the Theano computation graph is defined and the parameters are initialized. Three attributes are necessary for a model class:
+
+- self.inputs: a list of Theano tensors containing all the needed inputs.
+
+- self.params: a list of parameters to be trained. Note that parameters not included in self.params will not be updated by optimizer.
+
+- self.costs: a list of loss, the 0-index loss will be used as objective function by optimizer.
+
+These 3 attributes are important interfaces. All the model file are placed under codes/model/. Some common and basic layers such as mlp are defined in **layers.py**.
+
+#### 2. reader.py
+
+The reader is defined in **reader.py**. It reads all the needed data and manage the data feeding process. The users only need to call its method reader.iterate_batch() to get a new mini-batch of data. The reader uses multi-threading thus it can package next mini-batch when model is under training.
+
+You can partially load a dataset by setting **head** and **tail**, the index range of images. This is very useful in debugging when you do not want the whole dataset be loaded.
+
+#### 3. optimizer.py
+
+The optimizers are defined in **optimizer.py**. It includes two methods: Adam and SGD. Adam got much better results on our experiments and is used by default.
+
+The optimizer return two functions:
+
+- train_func: compute loss and update parameters in model.params.
+
+- valid_func: only compute loss.
+
+
+#### 4. beam_search.py
+
+Implement the beam search code. The word probability will be the ensemble reusult of a list of models. If given one model (still in python list format), it will generate sentences using single model.
+
+
+#### 5. train.py
+
+There are 4 choices for task: 
+
+1. 'gnic': stands for Google Nic, used as base-line
+2. 'ss': stands for scene-specific contexts
+3. 'ra': stands for region-based attention
+4. 'rass': stands for scene-specific contexts + region-based attention
+
+and 3 choices for dataset: 'flickr8k', 'flick30k' and 'mscoco'.
+
+
+#### 6. infer.py
+
+Similar to train.py, you can choose the task(model) and dataset when inference. The variable **model_list** is a list of saved model files. If given more than one file, ensemble will be used in generation.
+
+
+#### 7. scene.py
+
+To predict LDA topic vectors using image features.
+
+
+#### 8. cnn_feature.py
+
+To extract CNN features
+
+
+#### 9. tools.py
+
+Some useful tools, such as timer and logger.
+
+
+
+
+
 
 
 

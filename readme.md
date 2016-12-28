@@ -7,14 +7,17 @@ We provide detailed steps to reproduce the results reported in our paper. The tw
 
 - region-based attention: we build our attention item-set using flexible visual regions proposed by Selective Search. The model can thus focus on more conceptually meaningful region of an image.
 
-If you find our code or model useful in your research, please consider citing:
+If you find our code or model useful in your research, please consider citing (accepted by TPAMI and now available as [pre-print](http://ieeexplore.ieee.org/document/7792748/)):
 
-	@article{jin2015aligning,
-  		title={Aligning where to see and what to tell: image caption with region-based attention and scene factorization},
-  		author={Jin, Junqi and Fu, Kun and Cui, Runpeng and Sha, Fei and Zhang, Changshui},
-  		journal={arXiv preprint arXiv:1506.06272},
-  		year={2015}
+	
+	@article{fu2016aligning,
+  		title={Aligning where to see and what to tell: image captioning with region-based attention and scene-specific contexts},
+  		author={Fu, Kun and Jin, Junqi and Cui, Runpeng and Sha, Fei and Zhang, Changshui},
+  		journal={Pattern Analysis and Machine Intelligence, IEEE Transactions on (TPAMI)},
+  		year={2016}
 	}
+
+Our previous arXiv version can be found at [arXiv paper](https://arxiv.org/abs/1506.06272)
 
 
 

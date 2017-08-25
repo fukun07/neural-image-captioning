@@ -37,7 +37,7 @@ if __name__ == '__main__':
     task = 'ss'
     print 'inference task: [{}]'.format(task)
 
-    dataset = 'flickr8k'
+    dataset = 'mscoco'
     data_dir = osp.join(DATA_ROOT, dataset)
 
     if task == 'gnic':

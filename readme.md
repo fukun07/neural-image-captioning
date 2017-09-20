@@ -1,13 +1,13 @@
 ### Introduction
-This code is used in the paper "Aligning Where to See and What to Tell: Image Captioning with Region-based Attention and Scene-specific Contexts". See our [arXiv version](http://arxiv.org/abs/1506.06272).
+This code is used in the paper "Aligning Where to See and What to Tell: Image Captioning with Region-based Attention and Scene-specific Contexts". See our [TPAMI paper](http://ieeexplore.ieee.org/document/7792748/) or [early draft on arXiv](http://arxiv.org/abs/1506.06272). Note that our TPAMI version has many improvements over the arXiv version.
 
 We provide detailed steps to reproduce the results reported in our paper. The two novel techniques are:
 
-- scene-specific contexts: text topics of images are extraced using Latent Dirichlet Allocation (LDA). The LSTM language model is then biased by these contexts.
+- scene-specific contexts: text topics of images are extracted using Latent Dirichlet Allocation (LDA). The LSTM language model is then biased by these contexts.
 
 - region-based attention: we build our attention item-set using flexible visual regions proposed by Selective Search. The model can thus focus on more conceptually meaningful region of an image.
 
-If you find our code or model useful in your research, please consider citing (accepted by TPAMI and now available as [pre-print](http://ieeexplore.ieee.org/document/7792748/)):
+If you find our code or model useful in your research, please consider citing:
 
 	
 	@article{fu2016aligning,
@@ -16,8 +16,6 @@ If you find our code or model useful in your research, please consider citing (a
   		journal={Pattern Analysis and Machine Intelligence, IEEE Transactions on (TPAMI)},
   		year={2016}
 	}
-
-Our previous arXiv version can be found at [arXiv paper](https://arxiv.org/abs/1506.06272)
 
 
 

@@ -70,7 +70,7 @@ class Model(object):
         self._init_func = None
         self._step_func = None
         self._proj_func = None
-        self._feat_shared = theano.shared(np.zeros((1, npatch, nimg)).astype(theano.config.floatX))
+        self._feat_shared = theano.shared(np.zeros((1, npatch, na)).astype(theano.config.floatX))
         self._scene_shared = theano.shared(np.zeros((1, ns)).astype(theano.config.floatX))
 
     def compute(self, state, w_idx, feat, scene):

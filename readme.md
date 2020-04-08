@@ -48,6 +48,8 @@ We provide the processed data of Flickr8K, Flickr30K and MSCOCO. You may need to
 
 After downloading the **data.zip**, you are able to run model **baseline** and **ss** (scene-specific). 
 
+We also provide an alternative source for downloading the data. Please refer to [Baidu Pan](http://pan.baidu.com/s/1c1Mtndm) in Chinese.
+
 #### 3. configurate path
 Please open the **config.py** script and define the path as you like:
 
@@ -90,9 +92,6 @@ Attention model needs a larger feature set. For one image, ResNet is appplied to
 - [flickr30k-30res.zip](https://mega.nz/#!5o5CAJwS!edH97itEWU17XIeTTZqr2EIduhRZCIvTV6ZwQZ_r6Zw) (5.8G) includes the 30-region ResNet features for Flickr30K. Please unzip it and place it under DATA_ROOT/flickr30k/features/.
 
 - [mscoco-30res.zip](https://mega.nz/#!twRBxSIY!FQAHVFoVPVdnS-3CkVL95e4zDEl8WCQPaoUV_aYfj2A) (16.4G) includes the 30-region ResNet features for MSCOCO. Please unzip it and place it under DATA_ROOT/mscoco/features/.
-
-
-We also provide an alternative source for downloading the data. Please refer to [Baidu Pan](http://pan.baidu.com/s/1c1Mtndm) in Chinese.
 
 
 #### 2. or extract features by yourself
